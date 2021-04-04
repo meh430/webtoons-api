@@ -44,7 +44,7 @@ export function scrapeListingPage(listingHtml: string): PagedWebtoonPreviewItem 
 }
 
 // Meant to scrape each individual comic preview item from a list of comics
-export function scrapePreviewItem(itemHtml: string): WebtoonPreviewItem {
+function scrapePreviewItem(itemHtml: string): WebtoonPreviewItem {
     const $ = cheerio.load(itemHtml);
     const coverImage = $("a > img").attr()["data-src"].trim();
     const titleElement = $("h3 > a");
@@ -53,7 +53,7 @@ export function scrapePreviewItem(itemHtml: string): WebtoonPreviewItem {
 }
 
 // Meant to get info about pagination
-export function parsePageNumbers(pageNumHtml: string): PageInfo {
+function parsePageNumbers(pageNumHtml: string): PageInfo {
     const pageSpan: string[] = pageNumHtml.split(" ");
     return { currentPage: Number(pageSpan[1]), lastPage: Number(pageSpan[3]) };
 }
@@ -90,7 +90,7 @@ export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): We
 }
 
 // Meant to scrape each chapter list item
-export function scrapeChapterListItem(chapterListItemHtml: string): Chapter {
+function scrapeChapterListItem(chapterListItemHtml: string): Chapter {
     const $ = cheerio.load(chapterListItemHtml);
     const chapterNumber: string = $("a").text().trim();
     const internalChapterReference: string[] = $("a").attr().href.trim().split("/");

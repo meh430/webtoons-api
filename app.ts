@@ -1,16 +1,12 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-import cheerio from "cheerio";
-import {
-    PagedWebtoonPreviewItem,
-    scrapeListingPage,
-    scrapeWebtoonPage,
-    Webtoon,
-    scrapeWebtoonChapter,
-} from "./src/scraper";
+import * as dotenv from 'dotenv';
+import initRoutes from "./src/routes";
+import { errorHandler } from "./src/errorHandler";
 
-const app = express();
+dotenv.config();
+const app: express.Application = express();
 const port: number = +(process.env.PORT || 3000);
 
 app.use(express.json());
@@ -21,24 +17,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/", async (req, res) => {
+app.get("/", async (req: express.Request, res: express.Response) => {
     try {
-        const html = await fetch("https://mangakomi.com/manga-genre/manhwa/?m_orderby=latest");
-        const resp = await html.text();
-        const items = scrapeListingPage(resp);
-        /*const $ = cheerio.load(resp);
-        console.log($('div[class="page-listing-item"]').html());
-        const elems = $('div[class="page-listing-item"]');
-        elems.each((index, element) => {
-            console.log(index);
-            console.log($.html(elems[index]));
-        });*/
-
-        res.status(200).send(items);
+        res.status(200).send("Hello World");
     } catch (e) {
         console.log(e);
     }
 });
+
+initRoutes(app);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
