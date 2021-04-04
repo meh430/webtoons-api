@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import fetch from "node-fetch"
 import cheerio from "cheerio"
-import { PagedWebtoonPreviewItem, scrapeListingPage } from "./src/scraper";
+import { PagedWebtoonPreviewItem, scrapeListingPage, scrapeWebtoonPage, Webtoon } from "./src/scraper";
 
 const app = express();
 const port: number = +(process.env.PORT || 3000);
@@ -17,9 +17,9 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
     try {
-        const html = await fetch("https://mangakomi.com/manga-genre/manhwa/?m_orderby=latest");
+        const html = await fetch("https://mangakomi.com/manga/the-god-of-high-school/");
         const resp = await html.text();
-        const items: PagedWebtoonPreviewItem = scrapeListingPage(resp);
+        const items: Webtoon = scrapeWebtoonPage(resp, "the-god-of-high-school");
         /*const $ = cheerio.load(resp);
         console.log($('div[class="page-listing-item"]').html());
         const elems = $('div[class="page-listing-item"]');
@@ -34,6 +34,6 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.listen(port, '0.0.0.0',  () => {
+app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
 });
