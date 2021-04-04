@@ -17,9 +17,9 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
     try {
-        const html = await fetch("https://mangakomi.com/manga/the-god-of-high-school/chapter-507/");
+        const html = await fetch("https://mangakomi.com/manga/the-god-of-high-school/");
         const resp = await html.text();
-        const items: string[] = scrapeWebtoonChapter(resp);
+        const items = scrapeWebtoonPage(resp, 'the-god-of-high-school');
         /*const $ = cheerio.load(resp);
         console.log($('div[class="page-listing-item"]').html());
         const elems = $('div[class="page-listing-item"]');

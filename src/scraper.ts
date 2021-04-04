@@ -90,11 +90,11 @@ export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): We
 export function scrapeChapterListItem(chapterListItemHtml: string): Chapter {
     const $ = cheerio.load(chapterListItemHtml);
     const chapterNumber: string = $("a").text().trim();
-    const internalChapterReference: string = $("a").attr().href;
-    const uploadDate: string = $("span[class='chapter-release-date'] > i").text();
+    const internalChapterReference: string[] = $("a").attr().href.trim().split('/');
+    const uploadDate: string = $("span[class='chapter-release-date'] > i").text().trim();
     return {
         chapterNumber: chapterNumber,
-        internalChapterReference: internalChapterReference,
+        internalChapterReference: internalChapterReference[internalChapterReference.length - 2],
         uploadDate: uploadDate,
     };
 }
