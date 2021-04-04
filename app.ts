@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import fetch from "node-fetch"
 import cheerio from "cheerio"
-import { PagedWebtoonPreviewItem, scrapeListingPage, scrapeWebtoonPage, Webtoon } from "./src/scraper";
+import { PagedWebtoonPreviewItem, scrapeListingPage, scrapeWebtoonPage, Webtoon, scrapeWebtoonChapter} from "./src/scraper";
 
 const app = express();
 const port: number = +(process.env.PORT || 3000);
@@ -17,9 +17,9 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
     try {
-        const html = await fetch("https://mangakomi.com/manga/the-god-of-high-school/");
+        const html = await fetch("https://mangakomi.com/manga/the-god-of-high-school/chapter-507/");
         const resp = await html.text();
-        const items: Webtoon = scrapeWebtoonPage(resp, "the-god-of-high-school");
+        const items: string[] = scrapeWebtoonChapter(resp);
         /*const $ = cheerio.load(resp);
         console.log($('div[class="page-listing-item"]').html());
         const elems = $('div[class="page-listing-item"]');

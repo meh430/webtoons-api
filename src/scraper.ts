@@ -65,9 +65,8 @@ export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): We
     const rating: string = $("div[class='post-total-rating allow_vote'] > span").text();
     const author: string = $("div[class='summary-content'] > div[class='author-content'] > a").text();
     const artist: string = $("div[class='summary-content'] > div[class='artist-content'] > a").text();
-    const summary: string = $("div[class='description-summary'] > div[class='summary__content show-more active']")
-        .text()
-        .trim();
+    const summary: string = $("div[class='description-summary'] > div[class='summary__content show-more']")
+        .text().trim();
     const chapterListItems = $("ul[class='main version-chap'] > li[class='wp-manga-chapter  ']");
     const chapters: Chapter[] = [];
     chapterListItems.each((index, element) => {
@@ -98,4 +97,14 @@ export function scrapeChapterListItem(chapterListItemHtml: string): Chapter {
         internalChapterReference: internalChapterReference,
         uploadDate: uploadDate,
     };
+}
+
+export function scrapeWebtoonChapter(chapterPageHtml: string): string[] {
+    const $ = cheerio.load(chapterPageHtml);
+    const pageImages = $("div[class='reading-content'] > div[class='page-break no-gaps'] > img");
+    const pageImageUrls: string[] = [];
+    pageImages.each((index, element) => {
+        pageImageUrls.push($($.html(pageImages[index])).attr()['data-src'].trim());
+    });
+    return pageImageUrls;
 }
