@@ -83,6 +83,10 @@ export default function initRoutes(app: express.Application) {
             })
             const discoverItems: PagedWebtoonPreviewItem[] = (await Promise.all(pageHtmls)).map(html => scrapeListingPage(html))
 
+            for (let i = 0; i < categories.length; i++) {
+                discoverItems[i].category = categories[i]
+            }
+
             res.status(200).send(discoverItems);
         })
     );
