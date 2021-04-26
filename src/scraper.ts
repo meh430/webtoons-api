@@ -28,7 +28,11 @@ export interface Webtoon extends WebtoonPreviewItem {
     author: string;
     artist: string;
     numChapters: number;
-    chapters: Chapter[];
+}
+
+export interface WebtoonChapters {
+    webtoon: Webtoon;
+    chapters: Chapter[]
 }
 
 // Meant to scrape a list of comics, from search results or from browsing
@@ -59,7 +63,7 @@ function parsePageNumbers(pageNumHtml: string): PageInfo {
 }
 
 // Meant to get detailed information about a comic
-export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): Webtoon {
+export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): WebtoonChapters {
     const $ = cheerio.load(webtoonHtml);
     const name: string = $("div[class='post-title'] > h1").text().trim();
     const coverImage: string = $("div[class='summary_image'] > a > img").attr()["data-src"].trim();
@@ -77,15 +81,17 @@ export function scrapeWebtoonPage(webtoonHtml: string, internalName: string): We
     });
 
     return {
-        name: name,
-        internalName: internalName,
-        coverImage: coverImage,
-        summary: summary,
-        rating: rating,
-        author: author,
-        artist: artist,
-        numChapters: chapters.length,
-        chapters: chapters,
+        webtoon: {
+            name: name,
+            internalName: internalName,
+            coverImage: coverImage,
+            summary: summary,
+            rating: rating,
+            author: author,
+            artist: artist,
+            numChapters: chapters.length,
+        },
+        chapters: chapters
     };
 }
 

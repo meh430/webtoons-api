@@ -1,16 +1,16 @@
 import express from "express";
 import fetch from "node-fetch";
 import { asyncError } from "./errorHandler";
-import { scrapeListingPage, scrapeWebtoonChapter, scrapeWebtoonPage } from "./scraper";
+import { PagedWebtoonPreviewItem, scrapeListingPage, scrapeWebtoonChapter, scrapeWebtoonPage } from "./scraper";
 import * as dotenv from 'dotenv';
 dotenv.config();
 const baseEndpoint = process.env.BASE_ENDPOINT;
 
 enum Categories {
     latest = "latest",
-    alphabet = "alphabet",
+    views = "views",
     rating = "rating",
-    mostViews = "views",
+    alphabet = "alphabet"
 }
 
 async function getHtml(endpoint: string): Promise<string> {
@@ -70,6 +70,20 @@ export default function initRoutes(app: express.Application) {
             const webtoonChapterEndpoint = `${baseEndpoint}/manga/${internalName}/${chapterName}`;
 
             res.status(200).send(scrapeWebtoonChapter(await getHtml(webtoonChapterEndpoint)));
+        })
+    );
+
+    app.get(
+        "/discover",
+        asyncError(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+            const categories: string[] = Object.values(Categories)
+            const pageHtmls = categories.map(category => {
+                const webtoonBaseEndpoint = `${baseEndpoint}/manga-genre/manhwa/page/1/?m_orderby=${category}`;
+                return getHtml(webtoonBaseEndpoint)
+            })
+            const discoverItems: PagedWebtoonPreviewItem[] = (await Promise.all(pageHtmls)).map(html => scrapeListingPage(html))
+
+            res.status(200).send(discoverItems);
         })
     );
 }

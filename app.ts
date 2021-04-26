@@ -28,6 +28,12 @@ app.get("/", async (req: express.Request, res: express.Response) => {
 initRoutes(app);
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV == 'development') {
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`App listening at http://localhost:${port}`);
+    });
+} else {
+    app.listen(port, () => {
+        console.log(`App listening at http://localhost:${port}`);
+    });
+}
