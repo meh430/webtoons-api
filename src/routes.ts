@@ -32,7 +32,7 @@ export default function initRoutes(app: express.Application) {
         asyncError(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
             const page = req.params.page;
             const category = req.params.category;
-            const webtoonBaseEndpoint = `${baseEndpoint}/manga-genre/manhwa/page/${page}/?m_orderby=${category}`;
+            const webtoonBaseEndpoint: string = `${baseEndpoint}/manga-genre/manhwa/page/${page}/?m_orderby=${category}`;
             res.status(200).send(scrapeListingPage(await getHtml(webtoonBaseEndpoint)));
         })
     );
@@ -55,7 +55,7 @@ export default function initRoutes(app: express.Application) {
         asyncError(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
             const internalName = req.params.internalName;
 
-            const webtoonEndpoint = `${baseEndpoint}/manga/${internalName}`;
+            const webtoonEndpoint: string = `${baseEndpoint}/manga/${internalName}`;
 
             res.status(200).send(scrapeWebtoonPage(await getHtml(webtoonEndpoint), internalName));
         })
@@ -67,7 +67,7 @@ export default function initRoutes(app: express.Application) {
             const internalName = req.params.internalName;
             const chapterName = req.params.chapterName;
 
-            const webtoonChapterEndpoint = `${baseEndpoint}/manga/${internalName}/${chapterName}`;
+            const webtoonChapterEndpoint: string = `${baseEndpoint}/manga/${internalName}/${chapterName}`;
 
             res.status(200).send(scrapeWebtoonChapter(await getHtml(webtoonChapterEndpoint)));
         })
