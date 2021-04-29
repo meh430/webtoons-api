@@ -19,7 +19,7 @@ export interface Chapter {
 }
 
 export interface PagedWebtoonPreviewItem extends PageInfo {
-    category?: string;
+    category?   : string;
     items: WebtoonPreviewItem[];
 }
 

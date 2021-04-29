@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch";
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import initRoutes from "./src/routes";
 import { errorHandler } from "./src/errorHandler";
 
@@ -18,18 +17,14 @@ app.use((req, res, next) => {
 });
 
 app.get("/", async (req: express.Request, res: express.Response) => {
-    try {
-        res.status(200).send("Hello World");
-    } catch (e) {
-        console.log(e);
-    }
+    res.status(200).send("Hello World");
 });
 
 initRoutes(app);
 app.use(errorHandler);
 
-if (process.env.NODE_ENV == 'development') {
-    app.listen(port, '0.0.0.0', () => {
+if (process.env.NODE_ENV == "development") {
+    app.listen(port, "0.0.0.0", () => {
         console.log(`App listening at http://localhost:${port}`);
     });
 } else {
