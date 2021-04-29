@@ -42,7 +42,7 @@ export default function initRoutes(app: express.Application) {
         asyncError(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
             const query = req.query.q;
 
-            const webtoonSearchEndpoint = `${baseEndpoint}/manga-genre/manhwa/?s=${query}`;
+            const webtoonSearchEndpoint: string = `${baseEndpoint}/manga-genre/manhwa/?s=${query}`;
             let searchResults = scrapeListingPage(await getHtml(webtoonSearchEndpoint));
             searchResults.currentPage = 1;
             searchResults.lastPage = 1;
